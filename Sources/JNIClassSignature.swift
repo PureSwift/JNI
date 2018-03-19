@@ -8,11 +8,17 @@
 
 public struct JNIClassSignature {
     
-    public var namespaces: [String]
+    public let namespaces: [String]
     
-    public init(namespaces: [String]) {
+    public init?(namespaces: [String]) {
         
-        assert(namespaces.isEmpty == false)
+        guard namespaces.isEmpty == false
+            else { return nil }
+        
+        self.namespaces = namespaces
+    }
+    
+    fileprivate init(_ namespaces: [String]) {
         
         self.namespaces = namespaces
     }
@@ -30,7 +36,7 @@ extension JNIClassSignature: RawRepresentable {
     
     public init?(rawValue: String) {
         
-        let namespaces = rawValue
+        let namespaces = rawValue.characters
             .split(separator: "/", maxSplits: .max, omittingEmptySubsequences: true)
             .map { String($0) }
         
@@ -47,7 +53,10 @@ extension JNIClassSignature: ExpressibleByArrayLiteral {
     
     public init(arrayLiteral elements: String...) {
         
-        self.init(namespaces: elements)
+        guard let value = JNIClassSignature(namespaces: elements)
+            else { fatalError("Cannot initialize from \(elements)") }
+        
+        self = value
     }
 }
 
@@ -60,6 +69,6 @@ public extension JNIClassSignature {
     
     static func java(_ elements: String...) -> JNIClassSignature {
         
-        return JNIClassSignature(namespaces: JNIClassSignature.java.namespaces + elements)
+        return JNIClassSignature(JNIClassSignature.java.namespaces + elements)
     }
 }

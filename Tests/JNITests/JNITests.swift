@@ -37,7 +37,12 @@ class JNITests: XCTestCase {
         
         for (signature, string) in testData {
             
-            XCTAssert(signature.rawValue == string, "Invalid Signature output\n\(signature.rawValue)\n\(string)")
+            XCTAssert(signature.rawValue == string, "Unable to encode\n\(signature.rawValue)\n\(string)")
+            
+            guard let decoded = JNITypeSignature(rawValue: string)
+                else { XCTFail("Unable to decode\n\(string)"); continue }
+            
+            //XCTAssert(signature == decoded)
         }
     }
 }

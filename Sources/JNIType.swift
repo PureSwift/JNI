@@ -76,50 +76,13 @@ extension JNITypeSignature: RawRepresentable {
     
     public init?(rawValue: String) {
         
-        guard let typeValue = rawValue.first,
-            let type = JNIType(rawValue: String(typeValue))
-            else { return nil }
+        var errorContext = Parser.Error.Context()
         
-        switch type {
-            
-        case .boolean:
-            self = .boolean
-        case .byte:
-            self = .byte
-        case .char:
-            self = .char
-        case .double:
-            self = .double
-        case .float:
-            self = .float
-        case .long:
-            self = .long
-        case .int:
-            self = .int
-        case .short:
-            self = .short
-        case .void:
-            self = .void
-            
-        case .array:
-            
-            guard rawValue.utf8.count >= 2,
-                let suffix = String(rawValue.utf8.dropFirst()),
-                let arrayElementType = JNITypeSignature(rawValue: suffix)
-                else { return nil }
-            
-            self = .array(arrayElementType)
-            
-        case .object:
-            
-            guard rawValue.utf8.count >= 3,
-                rawValue.characters.last == ";".characters.first,
-                let objectTypeString = String(rawValue.utf8.dropFirst().dropLast()),
-                let classSignature = JNIClassSignature(rawValue: objectTypeString)
-                else { return nil }
-            
-            self = .object(classSignature)
-        }
+        guard let (value, substring) = try? Parser.firstTypeSignature(from: rawValue, context: &errorContext),
+            substring == rawValue
+            else { return nil } // string too big
+        
+        self = value
     }
     
     public var rawValue: String {
@@ -132,9 +95,9 @@ extension JNITypeSignature: RawRepresentable {
             
             value += classSignature.rawValue + ";"
             
-        case let .array(type):
+        case let .array(elementType):
             
-            value += type.rawValue
+            value += elementType.rawValue
             
         default:
             
@@ -142,5 +105,123 @@ extension JNITypeSignature: RawRepresentable {
         }
         
         return value
+    }
+}
+
+// MARK: - Parser
+
+internal extension JNITypeSignature {
+    
+    struct Parser {
+        
+        enum Error: Swift.Error {
+            
+            case isEmpty(Context)
+            case invalidType(String, Context)
+            
+            struct Context {
+                
+                var offset = 0
+            }
+        }
+        
+        static func firstType(from string: String, context: inout Error.Context) throws -> (JNIType, String) {
+            
+            guard let typeCharacter = string.characters.first
+                else { throw Error.isEmpty(context) }
+            
+            let typeString = String(typeCharacter)
+            
+            guard let type = JNIType(rawValue: typeString)
+                else { throw Error.invalidType(typeString, context) }
+            
+            return (type, typeString)
+        }
+        
+        static func firstTypeSignature(from string: String, context: inout Error.Context) throws -> (JNITypeSignature, String) {
+            
+            let (type, _) = try firstType(from: string, context: &context)
+            
+            let signatureString = try firstSubstring(from: string, context: &context)
+            
+            let typeSignature: JNITypeSignature
+            
+            switch type {
+                
+            case .boolean:
+                typeSignature = .boolean
+            case .byte:
+                typeSignature = .byte
+            case .char:
+                typeSignature = .char
+            case .double:
+                typeSignature = .double
+            case .float:
+                typeSignature = .float
+            case .long:
+                typeSignature = .long
+            case .int:
+                typeSignature = .int
+            case .short:
+                typeSignature = .short
+            case .void:
+                typeSignature = .void
+                
+            case .object:
+                
+                guard let classSignatureString = String(signatureString.utf8.dropFirst().dropLast())
+                    else { throw Error.isEmpty(context) }
+                
+                guard let classSignature = JNIClassSignature(rawValue: classSignatureString)
+                    else { throw Error.isEmpty(context) } // FIXME: Proper error
+                
+                typeSignature = .object(classSignature)
+                
+            case .array:
+                
+                guard let subtypeString = String(signatureString.utf8.dropFirst())
+                    else { throw Error.isEmpty(context) }
+                
+                let (arrayElementType, _) = try firstTypeSignature(from: subtypeString, context: &context)
+                
+                typeSignature = .array(arrayElementType)
+            }
+            
+            return (typeSignature, signatureString)
+        }
+        
+        static func firstSubstring (from string: String, context: inout Error.Context) throws -> String {
+            
+            let (type, typeString) = try firstType(from: string, context: &context)
+            
+            switch type {
+                
+            case .object:
+                
+                // get substring
+                guard let prefix = String(string.utf8.prefix(while: { String($0) != ";" }))
+                    else { throw Error.isEmpty(context) }
+                
+                assert(prefix.isEmpty == false)
+                
+                return prefix + ";"
+                
+            case .array:
+                
+                // get substring
+                guard let suffix = String(string.utf8.dropFirst())
+                    else { throw Error.isEmpty(context) }
+                
+                let substring = try firstSubstring(from: suffix, context: &context)
+                
+                assert(suffix.isEmpty == false)
+                
+                return typeString + substring
+                
+            default:
+                
+                return typeString
+            }
+        }
     }
 }

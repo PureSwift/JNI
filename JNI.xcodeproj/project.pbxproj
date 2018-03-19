@@ -20,6 +20,7 @@
 		6E45C80820603B4400C76374 /* JNIClassSignature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E45C80620603B4400C76374 /* JNIClassSignature.swift */; };
 		6E45C80920603B4400C76374 /* JNIClassSignature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E45C80620603B4400C76374 /* JNIClassSignature.swift */; };
 		6E45C80A20603B4400C76374 /* JNIClassSignature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E45C80620603B4400C76374 /* JNIClassSignature.swift */; };
+		6E8A202F206078AD006DDBD5 /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8A202E206078AD006DDBD5 /* Parser.swift */; };
 		8933C7851EB5B820000D00A4 /* JNI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8933C7841EB5B820000D00A4 /* JNI.swift */; };
 		8933C7861EB5B820000D00A4 /* JNI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8933C7841EB5B820000D00A4 /* JNI.swift */; };
 		8933C7871EB5B820000D00A4 /* JNI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8933C7841EB5B820000D00A4 /* JNI.swift */; };
@@ -64,6 +65,7 @@
 		6E45C7F720601DE500C76374 /* JNIMethodSignature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JNIMethodSignature.swift; sourceTree = "<group>"; };
 		6E45C8012060262100C76374 /* JNIType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JNIType.swift; sourceTree = "<group>"; };
 		6E45C80620603B4400C76374 /* JNIClassSignature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JNIClassSignature.swift; sourceTree = "<group>"; };
+		6E8A202E206078AD006DDBD5 /* Parser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
 		8933C7841EB5B820000D00A4 /* JNI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JNI.swift; sourceTree = "<group>"; };
 		8933C7891EB5B82A000D00A4 /* JNITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JNITests.swift; sourceTree = "<group>"; };
 		AD2FAA261CD0B6D800659CF4 /* JNI.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = JNI.plist; sourceTree = "<group>"; };
@@ -168,6 +170,7 @@
 				6E45C8012060262100C76374 /* JNIType.swift */,
 				6E45C7F720601DE500C76374 /* JNIMethodSignature.swift */,
 				6E45C80620603B4400C76374 /* JNIClassSignature.swift */,
+				6E8A202E206078AD006DDBD5 /* Parser.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -479,6 +482,7 @@
 			files = (
 				6E45C8022060262100C76374 /* JNIType.swift in Sources */,
 				8933C7851EB5B820000D00A4 /* JNI.swift in Sources */,
+				6E8A202F206078AD006DDBD5 /* Parser.swift in Sources */,
 				6E45C7F820601DE500C76374 /* JNIMethodSignature.swift in Sources */,
 				6E45C80720603B4400C76374 /* JNIClassSignature.swift in Sources */,
 			);

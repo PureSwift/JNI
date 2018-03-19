@@ -41,7 +41,54 @@ extension JNIMethodSignature: RawRepresentable {
     
     public init?(rawValue: String) {
         
-        fatalError()
+        var isParsingArguments = true
+        
+        let utf8 = rawValue.utf8
+        
+        var offset = utf8.startIndex
+        
+        var arguments = [JNITypeSignature]()
+        
+        while offset < utf8.endIndex {
+            
+            let character = String(utf8[offset])
+            
+            switch character {
+                
+            case "(":
+                
+                isParsingArguments = true
+                offset = utf8.index(after: offset) // += 1
+                
+            case ")":
+                
+                isParsingArguments = false
+                offset = utf8.index(after: offset) // += 1
+                
+            default:
+             
+                var errorContext = JNITypeSignature.Parser.Error.Context()
+                
+                guard let suffix = String(utf8.suffix(from: offset)),
+                    let (typeSignature, substring) = try? JNITypeSignature.Parser.firstTypeSignature(from: suffix, context: &errorContext)
+                    else { return nil }
+                
+                (0 ..< substring.utf8.count).forEach { _ in offset = utf8.index(after: offset) }
+                
+                if isParsingArguments {
+                    
+                    arguments.append(typeSignature)
+                    
+                } else {
+                    
+                    self.init(argumentTypes: arguments, returnType: typeSignature)
+                    return
+                }
+            }
+        }
+        
+        
+        return nil
     }
     
     public var rawValue: String {
