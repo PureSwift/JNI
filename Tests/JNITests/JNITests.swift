@@ -32,7 +32,19 @@ class JNITests: XCTestCase {
             (JNIMethodSignature(argumentTypes: [.int, .object(.java("lang", "String")), .array(.int)], returnType: .long),
              "(ILjava/lang/String;[I)J"), // long f6(int n, String s, int[] arr)
             (JNIMethodSignature(argumentTypes: [.object(.java("lang", "Boolean")), .boolean], returnType: .object(.java("lang", "String"))),
-             "(Ljava/lang/Boolean;Z)Ljava/lang/String;") // String f7(Boolean b, boolean b2)
+             "(Ljava/lang/Boolean;Z)Ljava/lang/String;"), // String f7(Boolean b, boolean b2)
+            (JNIMethodSignature(
+                argumentTypes: [
+                    .object(["android", "content", "Context"]),
+                    .boolean,
+                    .object(["android", "bluetooth", "BluetoothGattCallback"]),
+                    .int
+                ],
+                returnType:
+                    .object(["android", "bluetooth", "BluetoothGatt"])
+                ),
+             "(Landroid/content/Context;ZLandroid/bluetooth/BluetoothGattCallback;I)Landroid/bluetooth/BluetoothGatt;"
+            ) // public android.bluetooth.BluetoothGatt connectGatt(android.content.Context, boolean, android.bluetooth.BluetoothGattCallback, int);
         ]
         
         for (signature, string) in testData {
