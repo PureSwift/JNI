@@ -39,10 +39,10 @@ class JNITests: XCTestCase {
             
             XCTAssert(signature.rawValue == string, "Unable to encode\n\(signature.rawValue)\n\(string)")
             
-            guard let decoded = JNITypeSignature(rawValue: string)
+            guard let decoded = JNIMethodSignature(rawValue: string)
                 else { XCTFail("Unable to decode\n\(string)"); continue }
             
-            //XCTAssert(signature == decoded)
+            XCTAssert(signature == decoded)
         }
     }
 }

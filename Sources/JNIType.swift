@@ -199,7 +199,7 @@ internal extension JNITypeSignature {
             case .object:
                 
                 // get substring
-                guard let prefix = String(string.utf8.prefix(while: { String($0) != ";" }))
+                guard let prefix = String(string.utf8.prefix(while: { $0 != ";".utf8.first }))
                     else { throw Error.isEmpty(context) }
                 
                 assert(prefix.isEmpty == false)

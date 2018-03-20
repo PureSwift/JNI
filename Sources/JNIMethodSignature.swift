@@ -43,37 +43,37 @@ extension JNIMethodSignature: RawRepresentable {
         
         var isParsingArguments = true
         
-        let utf8 = rawValue.utf8
+        let utf8 = rawValue.toUTF8Data()
         
-        var offset = utf8.startIndex
+        var offset = 0
         
         var arguments = [JNITypeSignature]()
         
-        while offset < utf8.endIndex {
+        while offset < utf8.count {
             
-            let character = String(utf8[offset])
+            let character = String(Character(UnicodeScalar(utf8[offset])))
             
             switch character {
                 
             case "(":
                 
                 isParsingArguments = true
-                offset = utf8.index(after: offset) // += 1
+                offset += 1
                 
             case ")":
                 
                 isParsingArguments = false
-                offset = utf8.index(after: offset) // += 1
+                offset += 1
                 
             default:
              
                 var errorContext = JNITypeSignature.Parser.Error.Context()
                 
-                guard let suffix = String(utf8.suffix(from: offset)),
+                guard let suffix = rawValue.utf8Substring(range: offset ..< utf8.count),
                     let (typeSignature, substring) = try? JNITypeSignature.Parser.firstTypeSignature(from: suffix, context: &errorContext)
                     else { return nil }
                 
-                (0 ..< substring.utf8.count).forEach { _ in offset = utf8.index(after: offset) }
+                offset += substring.utf8.count
                 
                 if isParsingArguments {
                     
@@ -86,7 +86,6 @@ extension JNIMethodSignature: RawRepresentable {
                 }
             }
         }
-        
         
         return nil
     }
