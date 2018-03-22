@@ -8,12 +8,12 @@
 
 public struct JNIMethodSignature {
     
-    public var argumentTypes: [JNITypeSignature]
+    public var argumentTypes: [JNIValueTypeSignature]
     
-    public var returnType: JNITypeSignature
+    public var returnType: JNIValueTypeSignature
     
-    public init(argumentTypes: [JNITypeSignature],
-                returnType: JNITypeSignature) {
+    public init(argumentTypes: [JNIValueTypeSignature],
+                returnType: JNIValueTypeSignature) {
         
         self.argumentTypes = argumentTypes
         self.returnType = returnType
@@ -47,7 +47,7 @@ extension JNIMethodSignature: RawRepresentable {
         
         var offset = 0
         
-        var arguments = [JNITypeSignature]()
+        var arguments = [JNIValueTypeSignature]()
         
         while offset < utf8.count {
             
@@ -67,10 +67,10 @@ extension JNIMethodSignature: RawRepresentable {
                 
             default:
              
-                var errorContext = JNITypeSignature.Parser.Error.Context()
+                var errorContext = JNIValueTypeSignature.Parser.Error.Context()
                 
                 guard let suffix = rawValue.utf8Substring(range: offset ..< utf8.count),
-                    let (typeSignature, substring) = try? JNITypeSignature.Parser.firstTypeSignature(from: suffix, context: &errorContext)
+                    let (typeSignature, substring) = try? JNIValueTypeSignature.Parser.firstTypeSignature(from: suffix, context: &errorContext)
                     else { return nil }
                 
                 offset += substring.utf8.count

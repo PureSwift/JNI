@@ -1,12 +1,12 @@
 //
-//  JNIType.swift
+//  JNIValueType.swift
 //  JNI
 //
 //  Created by Alsey Coleman Miller on 3/19/18.
 //  Copyright © 2018 PureSwift. All rights reserved.
 //
 
-public enum JNIType: String {
+public enum JNIValueType: String {
     
     case boolean = "Z"
     case byte = "B"
@@ -21,7 +21,7 @@ public enum JNIType: String {
     case array = "["
 }
 
-public indirect enum JNITypeSignature {
+public indirect enum JNIValueTypeSignature {
     
     case boolean
     case byte
@@ -32,13 +32,13 @@ public indirect enum JNITypeSignature {
     case int
     case short
     case void
-    case array(JNITypeSignature)
-    case object(JNIClassSignature)
+    case array(JNIValueTypeSignature)
+    case object(JNIClassName)
 }
 
-public extension JNITypeSignature {
+public extension JNIValueTypeSignature {
     
-    public var type: JNIType {
+    public var type: JNIValueType {
         
         switch self {
         case .boolean: return .boolean
@@ -56,15 +56,15 @@ public extension JNITypeSignature {
     }
 }
 
-extension JNITypeSignature: Equatable {
+extension JNIValueTypeSignature: Equatable {
     
-    public static func == (lhs: JNITypeSignature, rhs: JNITypeSignature) -> Bool {
+    public static func == (lhs: JNIValueTypeSignature, rhs: JNIValueTypeSignature) -> Bool {
         
         return lhs.rawValue == rhs.rawValue
     }
 }
 
-extension JNITypeSignature: Hashable {
+extension JNIValueTypeSignature: Hashable {
     
     public var hashValue: Int {
         
@@ -72,7 +72,7 @@ extension JNITypeSignature: Hashable {
     }
 }
 
-extension JNITypeSignature: RawRepresentable {
+extension JNIValueTypeSignature: RawRepresentable {
     
     public init?(rawValue: String) {
         
@@ -110,7 +110,7 @@ extension JNITypeSignature: RawRepresentable {
 
 // MARK: - Parser
 
-internal extension JNITypeSignature {
+internal extension JNIValueTypeSignature {
     
     struct Parser {
         
@@ -125,26 +125,26 @@ internal extension JNITypeSignature {
             }
         }
         
-        static func firstType(from string: String, context: inout Error.Context) throws -> (JNIType, String) {
+        static func firstType(from string: String, context: inout Error.Context) throws -> (JNIValueType, String) {
             
             guard let typeCharacter = string.characters.first
                 else { throw Error.isEmpty(context) }
             
             let typeString = String(typeCharacter)
             
-            guard let type = JNIType(rawValue: typeString)
+            guard let type = JNIValueType(rawValue: typeString)
                 else { throw Error.invalidType(typeString, context) }
             
             return (type, typeString)
         }
         
-        static func firstTypeSignature(from string: String, context: inout Error.Context) throws -> (JNITypeSignature, String) {
+        static func firstTypeSignature(from string: String, context: inout Error.Context) throws -> (JNIValueTypeSignature, String) {
             
             let (type, _) = try firstType(from: string, context: &context)
             
             let signatureString = try firstSubstring(from: string, context: &context)
             
-            let typeSignature: JNITypeSignature
+            let typeSignature: JNIValueTypeSignature
             
             switch type {
                 
@@ -172,7 +172,7 @@ internal extension JNITypeSignature {
                 guard let classSignatureString = String(signatureString.utf8.dropFirst().dropLast())
                     else { throw Error.isEmpty(context) }
                 
-                guard let classSignature = JNIClassSignature(rawValue: classSignatureString)
+                guard let classSignature = JNIClassName(rawValue: classSignatureString)
                     else { throw Error.isEmpty(context) } // FIXME: Proper error
                 
                 typeSignature = .object(classSignature)

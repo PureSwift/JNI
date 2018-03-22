@@ -42,7 +42,7 @@ class JNITests: XCTestCase {
             
             (JNIMethodSignature(
                 argumentTypes: [
-                    .object(.java("lang", "String")),
+                    .object(.java("lang") ☕️ ["String"]),
                     .int
                 ],
                 returnType: .double),
@@ -51,7 +51,7 @@ class JNITests: XCTestCase {
             (JNIMethodSignature(
                 argumentTypes: [
                     .int,
-                    .array(.object(.java("lang", "String"))),
+                    .array(.object(.java("lang") ☕️ ["String"])),
                     .char
                 ], returnType: .void),
              "(I[Ljava/lang/String;C)V"), // void f5(int n, String[] arr, char c)
@@ -59,7 +59,7 @@ class JNITests: XCTestCase {
             (JNIMethodSignature(
                 argumentTypes: [
                     .int,
-                    .object(.java("lang", "String")),
+                    .object(.java("lang") ☕️ ["String"]),
                     .array(.int)
                 ],
                 returnType: .long),
@@ -67,23 +67,25 @@ class JNITests: XCTestCase {
             
             (JNIMethodSignature(
                 argumentTypes: [
-                    .object(.java("lang", "Boolean")),
-                    .boolean],
-                returnType: .object(.java("lang", "String"))),
+                    .object(.java("lang") ☕️ ["Boolean"]),
+                    .boolean
+                ],
+                returnType: .object(.java("lang") ☕️ ["String"])),
              "(Ljava/lang/Boolean;Z)Ljava/lang/String;"), // String f7(Boolean b, boolean b2)
             
             (JNIMethodSignature(
                 argumentTypes: [
-                    .object(["android", "content", "Context"]),
+                    .object(["android", "content"] ☕️ ["Context"]),
                     .boolean,
-                    .object(["android", "bluetooth", "BluetoothGattCallback"]),
+                    .object(["android", "bluetooth"] ☕️ ["BluetoothGattCallback"]),
                     .int
                 ],
                 returnType:
-                    .object(["android", "bluetooth", "BluetoothGatt"])
+                    .object(["android", "bluetooth"] ☕️ ["BluetoothGatt"])
                 ),
              "(Landroid/content/Context;ZLandroid/bluetooth/BluetoothGattCallback;I)Landroid/bluetooth/BluetoothGatt;"
             ) // public android.bluetooth.BluetoothGatt connectGatt(android.content.Context, boolean, android.bluetooth.BluetoothGattCallback, int);
+            // com/jmarkstar/swiftandroid/R$layout
         ]
         
         for (signature, string) in testData {
@@ -94,6 +96,42 @@ class JNITests: XCTestCase {
                 else { XCTFail("Unable to decode\n\(string)"); continue }
             
             XCTAssert(signature == decoded)
+        }
+    }
+    
+    func testPackage() {
+        
+        do {
+            
+            let stringValue = "java/lang"
+            
+            let package: JNIPackage = ["java", "lang"]
+            
+            XCTAssert(package.rawValue == stringValue)
+            XCTAssert(package == JNIPackage(rawValue: stringValue))
+        }
+        
+        do {
+            
+            let stringValue = "java/util"
+            
+            let package: JNIPackage = ["java", "util"]
+            
+            XCTAssert(package.rawValue == stringValue)
+            XCTAssert(package == JNIPackage(rawValue: stringValue))
+        }
+    }
+    
+    func testClassName() {
+        
+        do {
+            
+            let stringValue = "com/jmarkstar/swiftandroid/R$layout"
+            
+            let className = ["com", "jmarkstar", "swiftandroid"] ☕️ ["R", "layout"]
+            
+            XCTAssert(className.rawValue == stringValue, "\(className.rawValue) == \(stringValue)")
+            XCTAssert(className == JNIClassName(rawValue: stringValue))
         }
     }
 }
