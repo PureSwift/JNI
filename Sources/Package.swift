@@ -51,4 +51,9 @@ public extension JNIPackage {
         
         return JNIPackage(JNIPackage.java.elements + elements)
     }
+    
+    static func + (lhs: JNIPackage, rhs: JNIPackage) -> JNIPackage {
+        
+        return JNIPackage(lhs.elements + rhs.elements)
+    }
 }

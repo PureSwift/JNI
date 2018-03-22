@@ -120,6 +120,15 @@ class JNITests: XCTestCase {
             XCTAssert(package.rawValue == stringValue)
             XCTAssert(package == JNIPackage(rawValue: stringValue))
         }
+        
+        do {
+            
+            let package: JNIPackage = ["android"]
+            
+            let subpackage: JNIPackage = package + ["content"]
+            
+            XCTAssert(subpackage.elements == ["android", "content"])
+        }
     }
     
     func testClassName() {
