@@ -56,4 +56,9 @@ public extension JNIPackage {
         
         return JNIPackage(lhs.elements + rhs.elements)
     }
+    
+    static func + (lhs: JNIPackage, rhs: [String]) -> JNIPackage {
+        
+        return JNIPackage(lhs.elements + rhs)
+    }
 }
