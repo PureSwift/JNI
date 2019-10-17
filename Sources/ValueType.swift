@@ -38,7 +38,7 @@ public indirect enum JNIValueTypeSignature {
 
 public extension JNIValueTypeSignature {
     
-    public var type: JNIValueType {
+    var type: JNIValueType {
         
         switch self {
         case .boolean: return .boolean
@@ -127,7 +127,7 @@ internal extension JNIValueTypeSignature {
         
         static func firstType(from string: String, context: inout Error.Context) throws -> (JNIValueType, String) {
             
-            guard let typeCharacter = string.characters.first
+            guard let typeCharacter = string.first
                 else { throw Error.isEmpty(context) }
             
             let typeString = String(typeCharacter)

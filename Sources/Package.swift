@@ -32,9 +32,9 @@ public struct JNIPackage: JNIClassNameComponent {
 
 public extension JNIPackage {
     
-    public subscript(bounds: Range<Int>) -> RandomAccessSlice<JNIPackage> {
+    subscript(bounds: Range<Int>) -> Slice<JNIPackage> {
         
-        return RandomAccessSlice<JNIPackage>(base: self, bounds: bounds)
+        return Slice<JNIPackage>(base: self, bounds: bounds)
     }
 }
 

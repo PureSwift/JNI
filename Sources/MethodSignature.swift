@@ -92,7 +92,7 @@ extension JNIMethodSignature: RawRepresentable {
     
     public var rawValue: String {
         
-        let arguments = self.argumentTypes.reduce("") { $0.0 + $0.1.rawValue }
+        let arguments = self.argumentTypes.reduce("") { $0 + $1.rawValue }
         
         return "(" + arguments + ")" + returnType.rawValue
     }

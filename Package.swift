@@ -1,10 +1,18 @@
+// swift-tools-version:5.0
 import PackageDescription
 
 let package = Package(
     name: "JNI",
+    products: [
+        .library(
+            name: "JNI",
+            targets: ["JNI"]
+        ),
+    ],
     targets: [
-        Target(
-            name: "JNI")
+        .target(
+            name: "JNI",
+						path: "./Sources"
+        )
     ]
 )
-

@@ -40,7 +40,7 @@ extension JNIClassName: RawRepresentable {
     
     public init?(rawValue: String) {
         
-        let elements = rawValue.characters
+        let elements = rawValue
             .split(separator: JNIPackage.separator, maxSplits: .max, omittingEmptySubsequences: true)
             .map { String($0) }
         
@@ -76,7 +76,7 @@ extension JNIClassName: CustomStringConvertible {
 
 // MARK: - Extensions
 
-infix operator ☕️ { associativity right precedence 90 }
+infix operator ☕️
 
 public extension JNIPackage {
     

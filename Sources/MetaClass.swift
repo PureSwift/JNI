@@ -32,8 +32,8 @@ public struct JNIMetaClass: JNIClassNameComponent {
 
 public extension JNIMetaClass {
     
-    public subscript(bounds: Range<Int>) -> RandomAccessSlice<JNIMetaClass> {
+    subscript(bounds: Range<Int>) -> Slice<JNIMetaClass> {
         
-        return RandomAccessSlice<JNIMetaClass>(base: self, bounds: bounds)
+        return Slice<JNIMetaClass>(base: self, bounds: bounds)
     }
 }
