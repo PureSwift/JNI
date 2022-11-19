@@ -1,4 +1,4 @@
-// swift-tools-version:5.0
+// swift-tools-version:5.7
 import PackageDescription
 
 let package = Package(
@@ -12,7 +12,7 @@ let package = Package(
     targets: [
         .target(
             name: "JNI",
-						path: "./Sources"
+            path: "./Sources"
         )
     ]
 )

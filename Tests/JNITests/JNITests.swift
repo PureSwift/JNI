@@ -12,10 +12,6 @@ import XCTest
 
 class JNITests: XCTestCase {
     
-    static var allTests = [
-        ("testMethodSignature", testMethodSignature),
-        ]
-    
     func testMethodSignature() {
         
         let testData: [(JNIMethodSignature, String)] = [
